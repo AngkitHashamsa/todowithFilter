@@ -1,25 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
-
+import Form from './Form'
+import Table from './Table'
+import { useGlobalContext } from './context'
 function App() {
+  const { handleFilter, filterItem } = useGlobalContext()
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <main className='min-h-full'>
+      <div className='section-center mt-20 pt-20 text-center'>
+        <Form />
+        <div>
+          <select name='filter' id='filter' onClick={handleFilter}>
+            <option value='all'>all</option>
+            <option value='incomplete'>incomplete</option>
+            <option value='completed'>completed</option>
+          </select>
+        </div>
+
+        {filterItem.length > 0 && <Table />}
+      </div>
+    </main>
+  )
 }
 
-export default App;
+export default App
