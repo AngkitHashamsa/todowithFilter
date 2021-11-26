@@ -2,13 +2,7 @@ import React from 'react'
 import moment from 'moment'
 import { useGlobalContext } from './context'
 const Table = () => {
-  const { todo, filterItem } = useGlobalContext()
-  const dummy = [
-    { completed: true, data: 'asdsa', id: '1637931440324' },
-    { completed: false, data: 'asdasd', id: '16379315199' },
-    { completed: false, data: 'asdasdasdasdasd', id: '16' },
-    { completed: false, data: 'asdasdasdasdasd', id: '16' },
-  ]
+  const { filtered } = useGlobalContext()
 
   return (
     <div className='mt-12 mx-auto grid grid-cols-1 justify-center mb-20'>
@@ -21,7 +15,7 @@ const Table = () => {
           </tr>
         </thead>
         <tbody>
-          {filterItem.map((item) => {
+          {filtered.map((item) => {
             const { id, data, startDate, completed } = item
 
             return (

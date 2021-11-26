@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 
 const AppContext = React.createContext()
 
@@ -7,7 +7,8 @@ export const AppProvider = ({ children }) => {
   const [data, setData] = useState('')
   const [completed, setComplete] = useState(false)
   const [todo, setTodo] = useState([])
-  const [filterItem, setFilterItem] = useState([...todo])
+  const [filtered, setFiltered] = useState([])
+
   const handleSubmit = (e) => {
     e.preventDefault()
     if (data && startDate) {
@@ -31,18 +32,18 @@ export const AppProvider = ({ children }) => {
     let value = e.target.value
 
     if (value === 'all') {
-      setFilterItem(todo)
+      setFiltered([...todo])
     }
     if (value === 'completed') {
-      let newValue = todo.filter((item) => item.completed === true)
-      setFilterItem(newValue)
+      setFiltered([...todo].filter((item) => item.completed === true))
     }
     if (value === 'incomplete') {
-      let newValue = todo.filter((item) => item.completed === true)
-      setFilterItem(newValue)
+      setFiltered([...todo].filter((item) => item.completed === false))
     }
   }
-
+  useEffect(() => {
+    setFiltered([...todo])
+  }, [todo])
   return (
     <AppContext.Provider
       value={{
@@ -55,7 +56,7 @@ export const AppProvider = ({ children }) => {
         handleSubmit,
         todo,
         handleFilter,
-        filterItem,
+        filtered,
       }}
     >
       {children}
