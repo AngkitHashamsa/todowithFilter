@@ -2,11 +2,16 @@ import React, { useState, useContext, useEffect } from 'react'
 
 const AppContext = React.createContext()
 
+const getLocalStorage = () => {
+  let local = localStorage.getItem('todo')
+  return local ? JSON.parse(localStorage.getItem('todo')) : []
+}
+
 export const AppProvider = ({ children }) => {
   const [startDate, setStartDate] = useState(new Date())
   const [data, setData] = useState('')
   const [completed, setComplete] = useState(false)
-  const [todo, setTodo] = useState([])
+  const [todo, setTodo] = useState(getLocalStorage())
   const [filtered, setFiltered] = useState([])
 
   const handleSubmit = (e) => {
@@ -21,8 +26,9 @@ export const AppProvider = ({ children }) => {
       setTodo([...todo, newTodo])
 
       setStartDate(new Date())
-      setComplete(false)
+
       setData('')
+      setComplete(false)
     } else {
       alert('please enter all the value')
     }
@@ -41,9 +47,19 @@ export const AppProvider = ({ children }) => {
       setFiltered([...todo].filter((item) => item.completed === false))
     }
   }
+
+  const removeItem = () => {
+    setTodo([])
+  }
+
   useEffect(() => {
     setFiltered([...todo])
   }, [todo])
+
+  useEffect(() => {
+    localStorage.setItem('todo', JSON.stringify(todo))
+  }, [todo])
+
   return (
     <AppContext.Provider
       value={{
@@ -57,6 +73,7 @@ export const AppProvider = ({ children }) => {
         todo,
         handleFilter,
         filtered,
+        removeItem,
       }}
     >
       {children}
